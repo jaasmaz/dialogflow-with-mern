@@ -1,0 +1,21 @@
+{
+  "queryInput": {
+    "text": {
+      "text": "Hello"
+    },
+    "languageCode": "en"
+  },
+  "queryParams": {
+    "timeZone": "America/Los_Angeles"
+  }
+}
+
+$cred = gcloud auth print-access-token
+$headers = @{ "Authorization" = "Bearer $cred"; "x-goog-user-project" = "dialogflow-388919" }
+
+Invoke-WebRequest `
+    -Method POST `
+    -Headers $headers `
+    -ContentType: "application/json; charset=utf-8" `
+    -InFile request.json `
+    -Uri "https://us-central1-dialogflow.googleapis.com/v3/projects/dialogflow-388919/locations/us-central1/agents/6551f763-bfac-406e-a3ea-f858bef67e61/sessions/1234:detectIntent" | Select-Object -Expand Content
