@@ -1,14 +1,14 @@
 const express = require('express');
-const { SessionsClient } = require('@google-cloud/dialogflow-cx');
 require('dotenv').config();
+const { SessionsClient } = require('@google-cloud/dialogflow-cx');
+const mongoose = require('mongoose');
 
 const app = express();
 app.use(express.json());
 const port = 5000;
-const mongoose = require('mongoose');
 
 mongoose.connect(
-  `mongodb+srv://jaasmaz:${process.env.DATABASE_KEY}@cluster0.whxon0x.mongodb.net/?retryWrites=true&w=majority`,
+  `mongodb+srv://${process.env.DATABASE_USER}:${process.env.DATABASE_KEY}@cluster0.whxon0x.mongodb.net/?retryWrites=true&w=majority`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -20,15 +20,14 @@ app.get('/api', (req, res) => {
 });
 
 app.post('/api/detectIntent', async (req, res) => {
-  const projectId = 'dialogflow-388919';
-  const location = 'us-central1';
-  const agentId = '6551f763-bfac-406e-a3ea-f858bef67e61';
+  const projectId = process.env.PROJECT_ID;
+  const location = process.env.LOCATION;
+  const agentId = process.env.AGENT_ID;
   const sessionId = Math.random().toString(36).substring(7);
-  console.log(req.body.query);
   const query = req.body.query;
 
   const client = new SessionsClient({
-    apiEndpoint: 'us-central1-dialogflow.googleapis.com',
+    apiEndpoint: process.env.API_ENDPOINT,
   });
   const sessionPath = client.projectLocationAgentSessionPath(
     projectId,
