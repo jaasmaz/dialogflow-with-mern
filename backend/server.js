@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 const app = express();
 app.use(express.json());
-const port = 5000;
+const port = 5001;
 
 mongoose.connect(
   `mongodb+srv://${process.env.DATABASE_USER}:${process.env.DATABASE_KEY}@cluster0.whxon0x.mongodb.net/?retryWrites=true&w=majority`,
