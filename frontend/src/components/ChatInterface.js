@@ -6,7 +6,7 @@ import {
   List,
   ListItem,
   ListItemText,
-} from '@material-ui/core';
+} from '@mui/material';
 import axios from 'axios';
 import useDialogflow from '../hooks/useDialogflow';
 
