@@ -8,10 +8,10 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import axios from 'axios';
-import useDialogflow from './hooks/useDialogflow';
+import useDialogflow from '../hooks/useDialogflow';
 
 function ChatInterface() {
-  const sessionId = '123456';
+  const [sessionId] = useState('1234');
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
@@ -20,7 +20,7 @@ function ChatInterface() {
     setInput('');
     // const { response, loading, error } = useDialogflow(sessionId, message);
     try {
-      const response = await axios.post('/api/dialogflow', {
+      const response = await axios.post('/api/detectIntent', {
         text: input,
         sessionId: sessionId,
       });
@@ -46,11 +46,11 @@ function ChatInterface() {
       </Typography>
 
       <List>
+        {/* {loading && <div>Loading...</div>}
+        {error && <div>Error: {error}</div>} */}
         {messages.map((message, index) => (
           <ListItem key={index}>
             <ListItemText primary={message.text} secondary={message.sender} />
-            {/* {loading && <div>Loading...</div>}
-            {error && <div>Error: {error}</div>} */}
           </ListItem>
         ))}
       </List>
