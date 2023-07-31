@@ -15,17 +15,24 @@ function ChatInterface() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
-  const sendMessage = async () => {
+  const sendMessage = async (event) => {
+    event.preventDefault(); // Prevent form submission
     setMessages([...messages, { text: input, sender: 'User' }]);
     setInput('');
+    let botMessage = '';
     // const { response, loading, error } = useDialogflow(sessionId, message);
     try {
-      const response = await axios.post('/api/detectIntent', {
-        text: input,
-        sessionId: sessionId,
-      });
-      const botMessage =
-        response.data.queryResult.responseMessages[0].text.text[0];
+      const response = await axios
+        .post('http://localhost:5001/api/detectIntent', {
+          query: input,
+          // sessionId: sessionId,
+        })
+        .then((response) => {
+          botMessage = response.data.queryResult.responseMessages[0].text.text;
+        })
+        .catch((error) => {
+          console.log('Server Error: ', error);
+        });
       setMessages([
         ...messages,
         { text: input, sender: 'User' },
@@ -54,19 +61,20 @@ function ChatInterface() {
           </ListItem>
         ))}
       </List>
+      <form onSubmit={sendMessage}>
+        <TextField
+          value={input}
+          onChange={(event) => setInput(event.target.value)}
+          placeholder='Type your message'
+          fullWidth
+          variant='outlined'
+          style={{ marginBottom: '20px' }}
+        />
 
-      <TextField
-        value={input}
-        onChange={(event) => setInput(event.target.value)}
-        placeholder='Type your message'
-        fullWidth
-        variant='outlined'
-        style={{ marginBottom: '20px' }}
-      />
-
-      <Button variant='contained' color='primary' onClick={sendMessage}>
-        Send
-      </Button>
+        <Button type='submit' variant='contained' color='primary'>
+          Send
+        </Button>
+      </form>
     </div>
   );
 }
