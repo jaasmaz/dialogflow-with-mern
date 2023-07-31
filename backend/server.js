@@ -1,9 +1,11 @@
 const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
 const { SessionsClient } = require('@google-cloud/dialogflow-cx');
 const mongoose = require('mongoose');
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 const port = 5001;
 
